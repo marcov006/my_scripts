@@ -1,0 +1,29 @@
+awk '{print $2, $1}' names.txt
+awk '{print $2 ", " $1}' names.txt
+awk '{print NF, $0}' dukeofyork.txt # print Number of Filed in front of the lines
+awk '/up/{print NF, $0}' dukeofyork.txt # print only lines where the patern "up" is found
+awk 'NF==6{print NF, $0}' dukeofyork.txt # print only lines that have NF=6
+awk '/up/{print "UP:", NF, $0} /down/{print "DOWN:", NF, $0}' dukeofyork.txt #print lines containing "up" with UP and NF in front, and lines containing "down" with DOWN and NF in front
+awk -F , '{print $2}' # print second field of std input, where fileds are separated by comma
+awk -v hi=HELLO '{print $1, hi}' # specify a variable hi that is printed after first field for all lines
+awk -F '[,!]' '{print $2}' # print from the std input, the second filed, with separators equals to ! or , . Works in BASH
+awk 'BEGIN{FS=","} {print $2}' # Set the Field Seperator to comma, and fill the FS before starting to analyze the first line
+awk 'BEGIN{RS="!";FS=","} {print $2}' onebigline.txt # set the Record Separator to "!" and the FS to ","
+awk 'BEGIN{RS="";FS="\n"} {name=$1; address=$2; city=$3; print name; print address; print city}' multiaddress.txt # Record Separator is a blank line. Field Separator is return to line. So each field is a full line of the input file
+awk 'BEGIN{OFS=", ";ORS="!"} {print $2, $1}' names.txt # set Output Field Separator to "," set Output Record Separator to "!" . print the last, first!last, first!...
+awk 'BEGIN{FS=",";OFS="\t"} {print $1, $2, $3}' nameemailavg.csv > nameemailavgTABSeparated.csv # Replace FS separator "," by "\t"
+awk -F, '{print $1 "\t" $2 "\t" $3 "\t"}' nameemailavg.csv > nameemailavgTABSeparated.csv
+awk '{print $1 " % 1024 = " $1 % 1024}'
+awk '{a[1]=$1; a[2]=$2; a[3]=$3; print a[1] " " a[2] " " a[3]}'
+awk '$4 ~/up/{print}' dukeofyork.txt # print only the lines that contains "up" in the 4th field
+awk '$3 ~/^the/{print}' dukeofyork.txt # print lines where the 3rd character begin with "the"
+awk '{if (NF < 8) {print "short line:", $0 } else {print "long line: ", $0}}' dukeofyork.txt # print "short line" when Number of Field is < 8, else print "long line"
+awk -f file.awk file2 # execute the awk file on file2
+awk -F, '{printf("%s\t%s\t%d\n", $1, $2, $3)}' nameemailavg.csv # printf usage
+awk -F, '{printf("%20s %35s %3d\n", $1, $2, $3)}' nameemailavg.csv # printf usage
+awk -F, '{printf("%-20s %-35s %6.2f\n", $1, $2, $3)}' nameemailavg.csv # printf usage
+awk '{sub(/the/,"");print}' dukeofyork.txt # subsitute the first occurence of "the" in each line by "", and print the line
+awk '{gsub(/the[ym]/,"ALL OF THEM"); print }' dukeofyork.txt # Subsitute ALL occurence of "they" or "them" in each line by "ALL of THEM", and print the line
+awk -F, 'BEGIN{OFS="\t"} {split($1, a, / /); print a[2] ", " a[1], $2, $3 }' nameemailavg.csv # split the field matching with regular exp. " " (whitespace), and fill it in the array "a". Them print second field of a[], and first field of a[] , then print Field 2, and 3
+awk 'BEGIN{FS=","} !/^#/{if (NF>1) {print $0, count=(count + NF-1)}} END{print count}' CV_XMM7560_PCQG_list_ISS.txt # count number of lines not starting with having a number of filed that are comma separated greater than one, and increase a counter by the number of fields-1
+awk 'BEGIN{FS="#";OFS="#"} {printf("%-120s\t%s%-200s\n",$1, OFS, $2)}' awkCommands.txt > awkCmd.txt # Format the output files with number of lines per columns
